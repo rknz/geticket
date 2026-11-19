@@ -21,6 +21,7 @@ Platform packages are strictly separated inside [`releases/`](releases/README.md
 | **Computer (Chrome & Edge)** | `get-ticket-desktop-chrome-edge-v2.4.0.zip` | [Download Desktop ZIP](https://github.com/rknz/geticket/raw/main/releases/desktop/get-ticket-desktop-chrome-edge-v2.4.0.zip) | **Extract** folder, then click **Load unpacked** |
 | **SHA-256 Checksums** | `SHA256SUMS.txt` | [View / Download Checksums](releases/checksums/SHA256SUMS.txt) | Optional integrity verification |
 
+- **Complete Handbook (How It Works, Usage & GitHub Publishing):** [`docs/PUBLISH_AND_USER_GUIDE.md`](docs/PUBLISH_AND_USER_GUIDE.md)
 - **Download checklist & what to look for:** [`releases/README.md`](releases/README.md)
 - **Full step-by-step installation & usage guide:** [`docs/INSTALLATION_GUIDE_CHROME_EDGE_KIWI.md`](docs/INSTALLATION_GUIDE_CHROME_EDGE_KIWI.md)
 
