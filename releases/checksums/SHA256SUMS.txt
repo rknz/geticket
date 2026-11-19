@@ -1,2 +1,2 @@
-ae95b1d45b506dfd1464f65a64091710ad33db6731a59295319b5ad4ff28953b  get-ticket-desktop-chrome-edge-v2.4.0.zip
-de58c89fc411262dc96ebcbe523455b8de840c50728d111a1d9bbe005d45408d  get-ticket-android-kiwi-v2.4.0.zip
+271dbfdef2bca6c1c2208cbc1a8b544582cc5b12e07b7bbe6d0454cc69baad1b  get-ticket-desktop-chrome-edge-v2.4.0.zip
+964dca68a93f1c9a59c5fa7a8fccf028c5f4f122b6ffd2bda84184f182e59cf5  get-ticket-android-kiwi-v2.4.0.zip

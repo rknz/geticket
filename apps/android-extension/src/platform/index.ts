@@ -71,5 +71,20 @@ export function createKiwiBridge(): PlatformBridge {
         await chrome.tabs.create({ url: chrome.runtime.getURL("src/dashboard/index.html") });
       }
     },
+    async scheduleReleaseReminder(profileId: string, triggerAtIso: string): Promise<boolean> {
+      if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
+        try {
+          const res = (await chrome.runtime.sendMessage({
+            type: "SCHEDULE_RELEASE_REMINDER",
+            profileId,
+            triggerAtIso,
+          })) as { ok?: boolean } | undefined;
+          return Boolean(res?.ok);
+        } catch {
+          return false;
+        }
+      }
+      return false;
+    },
   };
 }
