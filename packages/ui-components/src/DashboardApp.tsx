@@ -20,6 +20,22 @@ import { computeReleaseReminder } from "@get-ticket/scheduler";
 import { StatusBadge } from "./StatusBadge.js";
 import { CalendarPicker } from "./CalendarPicker.js";
 import {
+  BellIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CompassIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+  HomeIcon,
+  PlusIcon,
+  SettingsIcon,
+  ShieldIcon,
+  SlidersIcon,
+  SwapIcon,
+  TrainTicketLogo,
+  TrashIcon,
+} from "./Icons.js";
+import {
   CLASS_OPTIONS,
   POPULAR_STATIONS,
   STATIC_TRAIN_REFERENCES,
@@ -297,7 +313,9 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
       `Passengers: ${activeProfile.passengerCount}`,
       `Trains: ${trains}`,
       `Class Priority: ${topClasses}`,
-      releasePlan ? `Release Reminder: ${releasePlan.releaseDate} (${activeProfile.releaseReminder.releaseTimeLocal})` : "",
+      releasePlan
+        ? `Release Reminder: ${releasePlan.releaseDate} (${activeProfile.releaseReminder.releaseTimeLocal})`
+        : "",
     ]
       .filter(Boolean)
       .join("\n");
@@ -335,35 +353,40 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
     }
   }
 
-  const tabs: Array<{ id: TabId; label: string }> = [
-    { id: "home", label: isBn ? "১. শুরু করুন" : "1. Home" },
-    { id: "plan", label: isBn ? "২. নতুন যাত্রা" : "2. Plan Trip" },
-    { id: "preferences", label: isBn ? "৩. পছন্দ ও সিট" : "3. Preferences" },
-    { id: "status", label: isBn ? "৪. রিমাইন্ডার ও উৎস" : "4. Reminders & Sources" },
-    { id: "settings", label: isBn ? "৫. সেটিংস ও সাহায্য" : "5. Settings & Help" },
+  const tabs: Array<{ id: TabId; label: string; shortLabel: string; icon: React.ReactNode }> = [
+    { id: "home", label: isBn ? "শুরু করুন" : "Home", shortLabel: isBn ? "হোম" : "Home", icon: <HomeIcon /> },
+    { id: "plan", label: isBn ? "নতুন যাত্রা" : "Plan Trip", shortLabel: isBn ? "যাত্রা" : "Plan", icon: <CompassIcon /> },
+    { id: "preferences", label: isBn ? "পছন্দ ও সিট" : "Preferences", shortLabel: isBn ? "পছন্দ" : "Prefs", icon: <SlidersIcon /> },
+    { id: "status", label: isBn ? "রিমাইন্ডার ও উৎস" : "Reminders", shortLabel: isBn ? "রিমাইন্ডার" : "Alerts", icon: <BellIcon /> },
+    { id: "settings", label: isBn ? "সেটিংস ও সাহায্য" : "Settings", shortLabel: isBn ? "সেটিংস" : "More", icon: <SettingsIcon /> },
   ];
+
+  const topClassCode =
+    activeProfile?.preferences.rankedClasses
+      .filter((c) => c.enabled)
+      .sort((a, b) => a.rank - b.rank)[0]?.classCode ?? "—";
 
   return (
     <div className="gt-app" data-theme={state.settings.theme}>
       <header className="gt-topbar">
         <div className="gt-topbar-inner">
           <div className="gt-brand">
-            <span className="gt-logo-mark" aria-hidden="true">
-              GT
+            <span className="gt-logo-mark">
+              <TrainTicketLogo size={22} />
             </span>
             <div>
               <h1>{t(lang, "appName")}</h1>
               <div className="gt-muted">
                 {isBn
-                  ? "ব্যক্তিগত Bangladesh Railway ট্রিপ প্ল্যানার ও অফিসিয়াল হ্যান্ডঅফ"
-                  : "Personal Bangladesh Railway Trip Planner & Official Handoff"}
+                  ? "Bangladesh Railway ব্যক্তিগত ট্রিপ প্ল্যানার"
+                  : "Bangladesh Railway Personal Trip Planner"}
               </div>
             </div>
           </div>
           <div className="gt-topbar-actions">
             <StatusBadge
               tone="live"
-              label={isBn ? "এক্সটেনশন সক্রিয় (Local)" : "Extension Active (Local)"}
+              label={isBn ? "লোকাল মোড সক্রিয়" : "Local Mode Active"}
             />
             <button
               type="button"
@@ -372,13 +395,14 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                 void handleSettingsPatch({ language: isBn ? "en" : "bn" })
               }
             >
-              {isBn ? "English" : "বাংলা"}
+              {isBn ? "EN" : "বাংলা"}
             </button>
           </div>
         </div>
       </header>
 
       <main className="gt-shell">
+        {/* Desktop Navigation */}
         <nav className="gt-nav" aria-label="Primary navigation">
           {tabs.map((item) => (
             <button
@@ -388,7 +412,8 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
               aria-current={tab === item.id ? "page" : undefined}
               onClick={() => setTab(item.id)}
             >
-              {item.label}
+              {item.icon}
+              <span>{item.label}</span>
             </button>
           ))}
         </nav>
@@ -410,60 +435,65 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        alignItems: "center",
-                        gap: 8,
+                        alignItems: "flex-start",
+                        gap: 12,
                       }}
                     >
-                      <h2>
-                        {isBn
-                          ? "Get Ticket কীভাবে কাজ করে?"
-                          : "How Get Ticket Works (3 Simple Steps)"}
-                      </h2>
+                      <div>
+                        <div className="gt-eyebrow">
+                          {isBn ? "দ্রুত শুরু" : "Quick Start"}
+                        </div>
+                        <h2>
+                          {isBn
+                            ? "৩ ধাপে আপনার রেলযাত্রা গুছিয়ে নিন"
+                            : "Organize Your Rail Trip in 3 Steps"}
+                        </h2>
+                      </div>
                       <button
                         type="button"
                         className="gt-btn gt-btn-sm"
                         onClick={() => setShowGuide(false)}
                       >
-                        {isBn ? "লুকান" : "Hide"}
+                        {isBn ? "লুকান" : "Dismiss"}
                       </button>
                     </div>
                     <p className="gt-muted" style={{ margin: "4px 0 0 0" }}>
                       {isBn
-                        ? "এটি কোনো ওয়েবসাইট নয় — এটি আপনার ব্রাউজারের ব্যক্তিগত Bangladesh Railway টিকিট প্ল্যানার। অফিসিয়াল API অনুমতি না থাকায় এটি নিজে টিকিট কাটবে না; বরং আপনার যাত্রার তথ্য, পছন্দের ক্লাস ও রিমাইন্ডার গুছিয়ে রাখবে এবং এক ক্লিকে অফিসিয়াল ই-টিকিট সাইটে নিয়ে যাবে।"
-                        : "This is a local browser extension — your personal Bangladesh Railway booking assistant. It organizes your trips, class priorities, and release reminders, then opens the official e-ticket portal so you complete booking safely yourself."}
+                        ? "Get Ticket আপনার ব্রাউজারের ব্যক্তিগত Bangladesh Railway প্ল্যানার। এটি আপনার যাত্রা, পছন্দের ক্লাস ও টিকিট রিলিজ রিমাইন্ডার সেভ রাখে এবং এক ক্লিকে অফিসিয়াল ই-টিকিট পোর্টালে নিয়ে যায়।"
+                        : "Get Ticket is your local browser planner for Bangladesh Railway. Save routes, class priorities, and release reminders, then jump straight to the official e-ticket portal."}
                     </p>
                     <div className="gt-steps">
                       <div className="gt-step-box">
-                        <span className="gt-step-num">1</span>
+                        <span className="gt-step-num">01</span>
                         <div style={{ fontWeight: 700, fontSize: 14 }}>
                           {isBn ? "যাত্রা ও ট্রেন বাছাই" : "Plan Your Trip"}
                         </div>
                         <div className="gt-muted">
                           {isBn
                             ? "স্টেশন, ক্যালেন্ডার থেকে তারিখ এবং পছন্দের ট্রেন সেভ করুন।"
-                            : "Pick stations, select a date on the calendar, and choose trains."}
+                            : "Pick stations, tap a date on the calendar, and select trains."}
                         </div>
                       </div>
                       <div className="gt-step-box">
-                        <span className="gt-step-num">2</span>
+                        <span className="gt-step-num">02</span>
                         <div style={{ fontWeight: 700, fontSize: 14 }}>
                           {isBn ? "পছন্দ ও রিমাইন্ডার" : "Rank & Remind"}
                         </div>
                         <div className="gt-muted">
                           {isBn
                             ? "ক্লাস অগ্রাধিকার (#১, #২) ও ১০ দিন আগের রিমাইন্ডার সেট করুন।"
-                            : "Set class priority (#1, #2) and advance ticket release reminders."}
+                            : "Order travel classes (#1, #2) and set advance release alerts."}
                         </div>
                       </div>
                       <div className="gt-step-box">
-                        <span className="gt-step-num">3</span>
+                        <span className="gt-step-num">03</span>
                         <div style={{ fontWeight: 700, fontSize: 14 }}>
-                          {isBn ? "অফিসিয়াল সাইটে বুক" : "Book on Official Site"}
+                          {isBn ? "অফিসিয়াল সাইটে বুক" : "Official Handoff"}
                         </div>
                         <div className="gt-muted">
                           {isBn
                             ? "এক ক্লিকে eticket.railway.gov.bd খুলে লগইন ও পেমেন্ট করুন।"
-                            : "Open eticket.railway.gov.bd in one click for Search → Select → Pay."}
+                            : "Launch eticket.railway.gov.bd for Search → Select → Pay."}
                         </div>
                       </div>
                     </div>
@@ -473,7 +503,8 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                         className="gt-btn gt-btn-primary"
                         onClick={() => setTab("plan")}
                       >
-                        + {isBn ? "নতুন যাত্রা তৈরি করুন" : "Plan a New Trip"}
+                        <PlusIcon />
+                        <span>{isBn ? "নতুন যাত্রা তৈরি করুন" : "Plan New Trip"}</span>
                       </button>
                       <button
                         type="button"
@@ -485,7 +516,8 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                           )
                         }
                       >
-                        {t(lang, "openOfficialSite")} →
+                        <span>{t(lang, "openOfficialSite")}</span>
+                        <ExternalLinkIcon />
                       </button>
                     </div>
                   </section>
@@ -497,21 +529,25 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      gap: 8,
-                      marginBottom: 12,
+                      gap: 10,
+                      marginBottom: 14,
                     }}
                   >
-                    <h2 style={{ margin: 0 }}>
-                      {isBn
-                        ? `সংরক্ষিত যাত্রাসমূহ (${state.profiles.length})`
-                        : `Saved Trips (${state.profiles.length})`}
-                    </h2>
+                    <div>
+                      <div className="gt-eyebrow">{isBn ? "আপনার তালিকা" : "Your Trips"}</div>
+                      <h2 style={{ margin: 0 }}>
+                        {isBn
+                          ? `সংরক্ষিত যাত্রাসমূহ (${state.profiles.length})`
+                          : `Saved Journey Profiles (${state.profiles.length})`}
+                      </h2>
+                    </div>
                     <button
                       type="button"
                       className="gt-btn gt-btn-sm gt-btn-primary"
                       onClick={() => setTab("plan")}
                     >
-                      + {isBn ? "নতুন যাত্রা" : "New Trip"}
+                      <PlusIcon />
+                      <span>{isBn ? "নতুন" : "New"}</span>
                     </button>
                   </div>
 
@@ -519,22 +555,20 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                     <div className="gt-list-item">
                       <div>
                         <strong>
-                          {isBn
-                            ? "এখনো কোনো যাত্রা সেভ করা হয়নি"
-                            : "No trips saved yet"}
+                          {isBn ? "এখনো কোনো যাত্রা সেভ করা হয়নি" : "No journeys saved yet"}
                         </strong>
                         <div className="gt-muted">
                           {isBn
-                            ? "শুরু করতে উপরের 'নতুন যাত্রা' বাটনে ক্লিক করুন এবং স্টেশন ও তারিখ নির্বাচন করুন।"
-                            : "Click 'New Trip' above to pick your stations, calendar date, and preferred trains."}
+                            ? "আপনার প্রথম যাত্রা তৈরি করতে 'নতুন' বাটনে ট্যাপ করুন।"
+                            : "Tap 'New' to pick stations, a calendar date, and preferred trains."}
                         </div>
                       </div>
                       <button
                         type="button"
-                        className="gt-btn gt-btn-primary"
+                        className="gt-btn gt-btn-primary gt-btn-sm"
                         onClick={() => setTab("plan")}
                       >
-                        {isBn ? "প্রথম যাত্রা যোগ করুন" : "Create First Trip"}
+                        {isBn ? "যাত্রা যোগ করুন" : "Create Trip"}
                       </button>
                     </div>
                   ) : (
@@ -549,21 +583,20 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                             <div>
                               <strong>{p.label}</strong>
                               <div className="gt-muted">
-                                {p.passengerCount}{" "}
-                                {isBn ? "জন যাত্রী" : "passenger(s)"} ·{" "}
+                                {p.passengerCount} {isBn ? "টি টিকিট" : "ticket(s)"} ·{" "}
                                 {p.direction === "outbound"
                                   ? isBn
-                                    ? "যাওয়া (Outbound)"
+                                    ? "যাওয়া"
                                     : "Outbound"
                                   : isBn
-                                    ? "ফেরা (Return)"
+                                    ? "ফেরা"
                                     : "Return"}
                                 {p.preferredTrainNumbers.length > 0
                                   ? ` · Trains: ${p.preferredTrainNumbers.join(", ")}`
                                   : ""}
                               </div>
                             </div>
-                            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                               <button
                                 type="button"
                                 className={`gt-btn gt-btn-sm${
@@ -574,7 +607,7 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                                 {isSelected
                                   ? isBn
                                     ? "নির্বাচিত"
-                                    : "Selected"
+                                    : "Active"
                                   : isBn
                                     ? "সিলেক্ট"
                                     : "Select"}
@@ -582,13 +615,14 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                               <button
                                 type="button"
                                 className="gt-btn gt-btn-sm"
+                                aria-label="Delete trip"
                                 onClick={async () => {
                                   const next = await bridge.deleteProfile(p.id);
                                   setState(next);
                                   showToast(isBn ? "যাত্রা মুছে ফেলা হয়েছে।" : "Trip removed.");
                                 }}
                               >
-                                {isBn ? "মুছুন" : "Delete"}
+                                <TrashIcon />
                               </button>
                             </div>
                           </li>
@@ -600,18 +634,18 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
               </>
             )}
 
-            {/* TAB 2: PLAN TRIP (WITH STATION PICKER, CALENDAR, TRAIN SEARCH) */}
+            {/* TAB 2: PLAN TRIP */}
             {tab === "plan" && (
               <section className="gt-card" aria-label="Plan New Trip">
+                <div className="gt-eyebrow">{isBn ? "যাত্রা নির্মাতা" : "Journey Builder"}</div>
                 <h2>{isBn ? "নতুন যাত্রা পরিকল্পনা করুন" : "Plan a New Journey"}</h2>
-                <p className="gt-muted" style={{ marginTop: 0, marginBottom: 16 }}>
+                <p className="gt-muted" style={{ marginTop: 0, marginBottom: 18 }}>
                   {isBn
-                    ? "নিচের তালিকা থেকে স্টেশন, ক্যালেন্ডার থেকে তারিখ এবং পছন্দের ট্রেন বেছে নিন — কিছুই ম্যানুয়ালি মুখস্থ লিখতে হবে না।"
-                    : "Pick stations from the searchable list, tap a date on the calendar, and select your preferred trains."}
+                    ? "স্টেশন সার্চ করুন, ক্যালেন্ডার থেকে তারিখ ট্যাপ করুন এবং পছন্দের ট্রেন বেছে নিন।"
+                    : "Search stations, tap a date on the calendar, and select your preferred trains."}
                 </p>
 
                 <form onSubmit={(e) => void handleCreateProfile(e)}>
-                  {/* Route Row with Searchable Dropdowns + Swap */}
                   <div className="gt-route-row">
                     <div className="gt-field">
                       <label htmlFor="gt-from">
@@ -662,7 +696,7 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                         setToStation(tmp);
                       }}
                     >
-                      ⇄
+                      <SwapIcon />
                     </button>
 
                     <div className="gt-field">
@@ -704,10 +738,9 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                     </div>
                   </div>
 
-                  {/* Quick Route Chips */}
                   <div style={{ marginBottom: 18 }}>
                     <div className="gt-muted" style={{ marginBottom: 6 }}>
-                      {isBn ? "জনপ্রিয় রুট (এক ট্যাপে সেট):" : "Quick popular routes:"}
+                      {isBn ? "জনপ্রিয় রুট (এক ট্যাপে সেট):" : "Popular corridors:"}
                     </div>
                     <div className="gt-chip-row">
                       {[
@@ -735,12 +768,11 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                     </div>
                   </div>
 
-                  {/* Interactive Visual Calendar Picker */}
                   <div className="gt-field" style={{ marginBottom: 18 }}>
                     <label>
                       {isBn
-                        ? "যাত্রার তারিখ (ক্যালেন্ডার থেকে ক্লিক করুন)"
-                        : "Date of Journey (Click a date on the calendar)"}
+                        ? "যাত্রার তারিখ (ক্যালেন্ডার থেকে ট্যাপ করুন)"
+                        : "Date of Journey (Select on Calendar)"}
                     </label>
                     <CalendarPicker
                       value={journeyDate}
@@ -749,7 +781,6 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                     />
                   </div>
 
-                  {/* Searchable Train Picker (Static Reference) */}
                   <div className="gt-field" style={{ marginBottom: 18 }}>
                     <label htmlFor="gt-train-search">
                       {isBn
@@ -761,17 +792,17 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                       value={trainSearch}
                       placeholder={
                         isBn
-                          ? "ট্রেনের নাম বা নম্বর লিখুন (যেমন: Tista, 707, Subarna)..."
-                          : "Search train name, number, or route (e.g., Tista, 707, Subarna)..."
+                          ? "ট্রেনের নাম বা নম্বর লিখুন (Tista, 707, Subarna)..."
+                          : "Filter by name, number, or corridor (Tista, 707, Subarna)..."
                       }
                       onChange={(e) => setTrainSearch(e.target.value)}
                     />
-                    <div className="gt-dropdown" style={{ maxHeight: 190 }}>
+                    <div className="gt-dropdown" style={{ maxHeight: 195 }}>
                       {filteredTrains.length === 0 ? (
-                        <div style={{ padding: 12 }} className="gt-muted">
+                        <div style={{ padding: 14 }} className="gt-muted">
                           {isBn
-                            ? "তালিকায় মিল পাওয়া যায়নি। এটি শুধু জনপ্রিয় ইন্টারসিটি ট্রেনের স্ট্যাটিক তালিকা।"
-                            : "No match in the static reference list."}
+                            ? "তালিকায় মিল পাওয়া যায়নি।"
+                            : "No matching train in static reference list."}
                         </div>
                       ) : (
                         filteredTrains.map((tr) => {
@@ -795,7 +826,15 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                               </div>
                               <StatusBadge
                                 tone={picked ? "live" : "unavailable"}
-                                label={picked ? (isBn ? "নির্বাচিত" : "Selected") : (isBn ? "যোগ করুন" : "Add")}
+                                label={
+                                  picked
+                                    ? isBn
+                                      ? "নির্বাচিত"
+                                      : "Selected"
+                                    : isBn
+                                      ? "যোগ করুন"
+                                      : "Add"
+                                }
                               />
                             </button>
                           );
@@ -804,11 +843,10 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                     </div>
                   </div>
 
-                  {/* Class, Passengers, Direction, Reminder Time */}
                   <div className="gt-grid">
                     <div className="gt-field">
                       <label htmlFor="gt-class">
-                        {isBn ? "১ম পছন্দের ক্লাস (Class)" : "Priority #1 Travel Class"}
+                        {isBn ? "১ম পছন্দের ক্লাস" : "Priority #1 Travel Class"}
                       </label>
                       <select
                         id="gt-class"
@@ -817,7 +855,9 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                       >
                         {CLASS_OPTIONS.map((cls) => (
                           <option key={cls.code} value={cls.code}>
-                            {isBn ? `${cls.labelBn} (${cls.code})` : `${cls.labelEn} (${cls.code})`}
+                            {isBn
+                              ? `${cls.labelBn} (${cls.code})`
+                              : `${cls.labelEn} (${cls.code})`}
                           </option>
                         ))}
                       </select>
@@ -847,14 +887,14 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                           className={`gt-chip${direction === "outbound" ? " is-active" : ""}`}
                           onClick={() => setDirection("outbound")}
                         >
-                          {isBn ? "যাওয়া (Outbound)" : "Outbound"}
+                          {isBn ? "যাওয়া" : "Outbound"}
                         </button>
                         <button
                           type="button"
                           className={`gt-chip${direction === "return" ? " is-active" : ""}`}
                           onClick={() => setDirection("return")}
                         >
-                          {isBn ? "ফেরা (Return)" : "Return"}
+                          {isBn ? "ফেরা" : "Return"}
                         </button>
                       </div>
                     </div>
@@ -897,6 +937,7 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
             {/* TAB 3: PREFERENCES */}
             {tab === "preferences" && (
               <section className="gt-card" aria-label="Preferences">
+                <div className="gt-eyebrow">{isBn ? "পছন্দক্রম ইঞ্জিন" : "Preference Engine"}</div>
                 <h2>{isBn ? "ক্লাস ও সিট পছন্দক্রম" : "Class & Seat Preferences"}</h2>
                 {!activeProfile ? (
                   <p className="gt-muted">
@@ -907,7 +948,7 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                 ) : (
                   <>
                     <p className="gt-muted">
-                      {isBn ? "নির্বাচিত যাত্রা:" : "Active trip:"}{" "}
+                      {isBn ? "সক্রিয় যাত্রা:" : "Active trip:"}{" "}
                       <strong>{activeProfile.label}</strong>
                     </p>
                     <h3>{isBn ? "ক্লাস অগ্রাধিকার তালিকা" : "Ranked Travel Classes"}</h3>
@@ -930,23 +971,25 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                               <button
                                 type="button"
                                 className="gt-btn gt-btn-sm"
+                                aria-label="Move up"
                                 onClick={() => void handleMoveClassRank(idx, -1)}
                               >
-                                ↑
+                                <ChevronUpIcon />
                               </button>
                               <button
                                 type="button"
                                 className="gt-btn gt-btn-sm"
+                                aria-label="Move down"
                                 onClick={() => void handleMoveClassRank(idx, 1)}
                               >
-                                ↓
+                                <ChevronDownIcon />
                               </button>
                             </div>
                           </li>
                         ))}
                     </ul>
 
-                    <h3 style={{ marginTop: 18 }}>
+                    <h3 style={{ marginTop: 20 }}>
                       {isBn ? "সিটের দিক পছন্দ (যাওয়া / ফেরা)" : "Seat Direction (Outbound / Return)"}
                     </h3>
                     <StatusBadge tone="stale" label={t(lang, "seatDirectionUnverified")} />
@@ -1028,23 +1071,26 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
               </section>
             )}
 
-            {/* TAB 4: REMINDERS & DATA SOURCES */}
+            {/* TAB 4: REMINDERS & SOURCES */}
             {tab === "status" && (
               <>
                 <section className="gt-card" aria-label="Release Reminder">
+                  <div className="gt-eyebrow">{isBn ? "রিলিজ অ্যালার্ট" : "Release Planner"}</div>
                   <h2>{isBn ? "টিকিট রিলিজ রিমাইন্ডার" : "Ticket Release Reminder"}</h2>
                   {releasePlan && activeProfile ? (
                     <>
                       <div className="gt-kv">
-                        <span>{isBn ? "নির্বাচিত যাত্রা" : "Active Trip"}</span>
+                        <span className="gt-muted">{isBn ? "সক্রিয় যাত্রা" : "Active Trip"}</span>
                         <strong>{activeProfile.label}</strong>
                       </div>
                       <div className="gt-kv">
-                        <span>{isBn ? "অগ্রিম টিকিট খোলার তারিখ (১০ দিন আগে)" : "Advance Release Date (10d)"}</span>
+                        <span className="gt-muted">
+                          {isBn ? "অগ্রিম টিকিট খোলার তারিখ (১০ দিন আগে)" : "Advance Release Date (10d)"}
+                        </span>
                         <strong>{releasePlan.releaseDate}</strong>
                       </div>
                       <div className="gt-kv">
-                        <span>{isBn ? "রিমাইন্ডার সময়" : "Configured Reminder Time"}</span>
+                        <span className="gt-muted">{isBn ? "রিমাইন্ডার সময়" : "Reminder Time"}</span>
                         <strong>{activeProfile.releaseReminder.releaseTimeLocal}</strong>
                       </div>
                       <p className="gt-muted" style={{ marginTop: 10 }}>
@@ -1056,7 +1102,10 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                           className="gt-btn gt-btn-primary"
                           onClick={() => void handleScheduleReminder()}
                         >
-                          {isBn ? "ব্রাউজার রিমাইন্ডার সেট করুন" : "Schedule Browser Reminder"}
+                          <BellIcon />
+                          <span>
+                            {isBn ? "ব্রাউজার রিমাইন্ডার সেট করুন" : "Schedule Browser Reminder"}
+                          </span>
                         </button>
                       </div>
                     </>
@@ -1069,16 +1118,17 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                   )}
                 </section>
 
-                <section className="gt-card" aria-label="Live Data & Official Sources">
-                  <h2>{isBn ? "অফিসিয়াল তথ্য উৎস ও লাইভ স্ট্যাটাস" : "Official Data Sources & Live Status"}</h2>
+                <section className="gt-card" aria-label="Official Data Sources">
+                  <div className="gt-eyebrow">{isBn ? "তথ্য স্বচ্ছতা" : "Data Provenance"}</div>
+                  <h2>{isBn ? "অফিসিয়াল তথ্য উৎস ও লাইভ স্ট্যাটাস" : "Official Sources & Live Status"}</h2>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
                     <StatusBadge tone="unavailable" label={t(lang, "liveAvailabilityUnavailable")} />
                     <StatusBadge tone="unavailable" label={t(lang, "liveServiceStatusUnavailable")} />
                   </div>
                   <p className="gt-muted">
                     {isBn
-                      ? "Bangladesh Railway-এর কোনো অনুমোদিত পাবলিক লাইভ API না থাকায় এই এক্সটেনশন কখনো ভুয়া সিট সংখ্যা বা অটো-পোলিং দেখায় না। নিচের অফিসিয়াল লিংকগুলো সরাসরি ব্যবহার করুন:"
-                      : "Because Bangladesh Railway has no public authorized extension API, Get Ticket never invents seat counts or runs unauthorized polling. Open official links directly below:"}
+                      ? "Bangladesh Railway-এর অনুমোদিত লাইভ API না থাকায় এই এক্সটেনশন কখনো ভুয়া সিট দেখায় না। নিচের অফিসিয়াল লিংকগুলো সরাসরি ব্যবহার করুন:"
+                      : "Because Bangladesh Railway has no public authorized extension API, Get Ticket never invents seat counts. Open official pages directly below:"}
                   </p>
                   <ul className="gt-list">
                     {OFFICIAL_STATIC_REFERENCES.map((ref) => (
@@ -1094,7 +1144,8 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                           className="gt-btn gt-btn-sm"
                           onClick={() => void bridge.openOfficialUrl(ref.url)}
                         >
-                          {isBn ? "খুলুন →" : "Open →"}
+                          <span>{isBn ? "খুলুন" : "Open"}</span>
+                          <ExternalLinkIcon />
                         </button>
                       </li>
                     ))}
@@ -1103,10 +1154,11 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
               </>
             )}
 
-            {/* TAB 5: SETTINGS & HELP */}
+            {/* TAB 5: SETTINGS & PRIVACY */}
             {tab === "settings" && (
               <>
                 <section className="gt-card" aria-label="Settings">
+                  <div className="gt-eyebrow">{isBn ? "ব্যক্তিগতকরণ" : "Personalization"}</div>
                   <h2>{isBn ? "ভাষা ও থিম সেটিংস" : "Language & Theme Settings"}</h2>
                   <div className="gt-grid">
                     <div className="gt-field">
@@ -1144,18 +1196,25 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                 </section>
 
                 <section className="gt-card" aria-label="Privacy and Help">
-                  <h2>{isBn ? "নিরাপত্তা, গোপনীয়তা ও সাহায্য" : "Security, Privacy & Quick FAQ"}</h2>
+                  <div className="gt-eyebrow" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <ShieldIcon size={14} />
+                    <span>{isBn ? "নিরাপত্তা ও গোপনীয়তা" : "Security & Privacy"}</span>
+                  </div>
+                  <h2>{isBn ? "আপনার ডাটা সম্পূর্ণ আপনার ডিভাইসে" : "Local-First Privacy Guarantee"}</h2>
                   <p>{t(lang, "noCredentialsNotice")}</p>
                   <p className="gt-muted">
                     {isBn
                       ? `অনুমোদিত অফিসিয়াল ডোমেইন: ${OFFICIAL_RAILWAY_HOSTS.join(", ")}। লগইন, CAPTCHA, OTP এবং পেমেন্ট সবসময় অফিসিয়াল সাইটে আপনি নিজে করবেন।`
-                      : `Allowlisted official hosts: ${OFFICIAL_RAILWAY_HOSTS.join(", ")}. Login, CAPTCHA, OTP, and payment are always completed manually by you on the official site.`}
+                      : `Allowlisted official hosts: ${OFFICIAL_RAILWAY_HOSTS.join(", ")}. Login, CAPTCHA, OTP, and payment remain 100% manual on the official site.`}
                   </p>
                   <div className="gt-btn-row">
                     <button
                       type="button"
                       className="gt-btn"
-                      onClick={() => setShowGuide(true)}
+                      onClick={() => {
+                        setShowGuide(true);
+                        setTab("home");
+                      }}
                     >
                       {isBn ? "হোম পেজে গাইড আবার দেখান" : "Show 3-Step Guide Again"}
                     </button>
@@ -1171,7 +1230,8 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
                         );
                       }}
                     >
-                      {isBn ? "সব লোকাল ডাটা মুছুন" : "Clear All Local Data"}
+                      <TrashIcon />
+                      <span>{isBn ? "সব লোকাল ডাটা মুছুন" : "Clear All Local Data"}</span>
                     </button>
                   </div>
                 </section>
@@ -1179,87 +1239,144 @@ export function DashboardApp({ bridge }: { bridge: PlatformBridge }) {
             )}
           </div>
 
-          {/* PERSISTENT RIGHT SUMMARY SIDEBAR */}
-          <aside className="gt-card gt-sidebar-card" aria-label="Active Trip Summary">
-            <h3 style={{ marginBottom: 8 }}>
-              {isBn ? "সক্রিয় যাত্রার সারসংক্ষেপ" : "Active Trip Summary"}
-            </h3>
-            {activeProfile && handoff && handoff.kind === "ready_for_official_booking" ? (
-              <>
-                <StatusBadge tone="ready" label={t(lang, "readyForOfficialBooking")} />
-                <div style={{ marginTop: 12 }}>
-                  <div className="gt-kv">
-                    <span className="gt-muted">{isBn ? "রুট" : "Route"}</span>
-                    <strong>
-                      {activeProfile.fromStation} → {activeProfile.toStation}
-                    </strong>
-                  </div>
-                  <div className="gt-kv">
-                    <span className="gt-muted">{isBn ? "তারিখ" : "Date"}</span>
-                    <strong>{activeProfile.journeyDate}</strong>
-                  </div>
-                  <div className="gt-kv">
-                    <span className="gt-muted">{isBn ? "যাত্রী" : "Tickets"}</span>
-                    <strong>{activeProfile.passengerCount}</strong>
-                  </div>
-                  <div className="gt-kv">
-                    <span className="gt-muted">{isBn ? "১ম ক্লাস" : "Top Class"}</span>
-                    <strong>
-                      {activeProfile.preferences.rankedClasses
-                        .filter((c) => c.enabled)
-                        .sort((a, b) => a.rank - b.rank)[0]?.classCode ?? "—"}
-                    </strong>
-                  </div>
-                  {releasePlan && (
-                    <div className="gt-kv">
-                      <span className="gt-muted">{isBn ? "রিলিজ তারিখ" : "Release Date"}</span>
-                      <strong>{releasePlan.releaseDate}</strong>
-                    </div>
-                  )}
+          {/* PERSISTENT BOARDING-PASS SUMMARY CARD */}
+          <aside className="gt-sidebar-sticky" aria-label="Active Trip Boarding Pass">
+            <div className="gt-ticket-card">
+              <div className="gt-ticket-top">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    opacity: 0.9,
+                  }}
+                >
+                  <span>{isBn ? "সক্রিয় ট্রিপ পাস" : "ACTIVE TRIP PASS"}</span>
+                  <span>{activeProfile ? activeProfile.direction.toUpperCase() : "READY"}</span>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 14 }}>
-                  <button
-                    type="button"
-                    className="gt-btn gt-btn-primary"
-                    onClick={() =>
-                      void bridge.openOfficialUrl(handoff.officialUrl, activeProfile.id)
-                    }
-                  >
-                    {t(lang, "openOfficialSite")} →
-                  </button>
-                  <button
-                    type="button"
-                    className="gt-btn"
-                    onClick={() => void handleCopySummary()}
-                  >
-                    {isBn ? "যাত্রার চেকলিস্ট কপি করুন" : "Copy Trip Checklist"}
-                  </button>
-                </div>
-                <p className="gt-muted" style={{ marginTop: 10, marginBottom: 0 }}>
-                  {t(lang, "officialFlowSteps")}
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="gt-muted" style={{ marginTop: 0 }}>
-                  {isBn
-                    ? "এখনো কোনো যাত্রা সিলেক্ট করা নেই। 'নতুন যাত্রা' ট্যাব থেকে আপনার প্রথম ট্রিপ সেভ করুন।"
-                    : "No trip selected yet. Use 'Plan Trip' to pick stations, date, and trains."}
-                </p>
-                <button
-                  type="button"
-                  className="gt-btn gt-btn-primary"
-                  style={{ width: "100%" }}
-                  onClick={() => setTab("plan")}
-                >
-                  + {isBn ? "নতুন যাত্রা তৈরি করুন" : "Plan a New Trip"}
-                </button>
-              </>
-            )}
+                {activeProfile ? (
+                  <div className="gt-ticket-route">
+                    <div className="gt-ticket-station">{activeProfile.fromStation}</div>
+                    <div className="gt-ticket-track" aria-hidden="true">
+                      <span className="gt-ticket-track-line" />
+                      <TrainTicketLogo size={18} />
+                      <span className="gt-ticket-track-line" />
+                    </div>
+                    <div className="gt-ticket-station" style={{ textAlign: "right" }}>
+                      {activeProfile.toStation}
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: 12, fontSize: 16, fontWeight: 700 }}>
+                    {isBn ? "আপনার পরবর্তী রেলযাত্রা" : "Your Next Rail Journey"}
+                  </div>
+                )}
+              </div>
+
+              <div className="gt-ticket-divider" aria-hidden="true">
+                <div className="gt-ticket-perf" />
+              </div>
+
+              <div className="gt-ticket-body">
+                {activeProfile && handoff && handoff.kind === "ready_for_official_booking" ? (
+                  <>
+                    <div style={{ marginBottom: 14 }}>
+                      <StatusBadge tone="ready" label={t(lang, "readyForOfficialBooking")} />
+                    </div>
+
+                    <div className="gt-ticket-meta-grid">
+                      <div className="gt-ticket-meta-item">
+                        <div className="gt-ticket-meta-label">{isBn ? "তারিখ" : "Date"}</div>
+                        <div className="gt-ticket-meta-value">{activeProfile.journeyDate}</div>
+                      </div>
+                      <div className="gt-ticket-meta-item">
+                        <div className="gt-ticket-meta-label">{isBn ? "যাত্রী" : "Tickets"}</div>
+                        <div className="gt-ticket-meta-value">
+                          {activeProfile.passengerCount} {isBn ? "জন" : "Pax"}
+                        </div>
+                      </div>
+                      <div className="gt-ticket-meta-item">
+                        <div className="gt-ticket-meta-label">{isBn ? "১ম ক্লাস" : "Top Class"}</div>
+                        <div className="gt-ticket-meta-value">{topClassCode}</div>
+                      </div>
+                      <div className="gt-ticket-meta-item">
+                        <div className="gt-ticket-meta-label">{isBn ? "রিলিজ" : "Release"}</div>
+                        <div className="gt-ticket-meta-value">
+                          {releasePlan ? releasePlan.releaseDate : "—"}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      <button
+                        type="button"
+                        className="gt-btn gt-btn-primary"
+                        onClick={() =>
+                          void bridge.openOfficialUrl(handoff.officialUrl, activeProfile.id)
+                        }
+                      >
+                        <span>{t(lang, "openOfficialSite")}</span>
+                        <ExternalLinkIcon />
+                      </button>
+                      <button
+                        type="button"
+                        className="gt-btn"
+                        onClick={() => void handleCopySummary()}
+                      >
+                        <CopyIcon />
+                        <span>
+                          {isBn ? "যাত্রার চেকলিস্ট কপি করুন" : "Copy Trip Checklist"}
+                        </span>
+                      </button>
+                    </div>
+                    <p className="gt-muted" style={{ marginTop: 12, marginBottom: 0 }}>
+                      {t(lang, "officialFlowSteps")}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="gt-muted" style={{ marginTop: 0 }}>
+                      {isBn
+                        ? "এখনো কোনো যাত্রা সিলেক্ট করা নেই। 'নতুন যাত্রা' ট্যাব থেকে আপনার প্রথম ট্রিপ সেভ করুন।"
+                        : "No active trip selected yet. Plan your first journey to generate your trip pass."}
+                    </p>
+                    <button
+                      type="button"
+                      className="gt-btn gt-btn-primary"
+                      style={{ width: "100%" }}
+                      onClick={() => setTab("plan")}
+                    >
+                      <PlusIcon />
+                      <span>{isBn ? "নতুন যাত্রা তৈরি করুন" : "Plan New Trip"}</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
           </aside>
         </div>
       </main>
+
+      {/* Mobile Fixed Bottom Navigation */}
+      <nav className="gt-mobile-nav" aria-label="Mobile navigation">
+        {tabs.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className="gt-mobile-nav-btn"
+            aria-current={tab === item.id ? "page" : undefined}
+            onClick={() => setTab(item.id)}
+          >
+            {item.icon}
+            <span>{item.shortLabel}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import type { GetTicketStoreState } from "@get-ticket/storage";
 import { computeReleaseReminder } from "@get-ticket/scheduler";
 import type { PlatformBridge } from "./DashboardApp.js";
 import { StatusBadge } from "./StatusBadge.js";
+import { ExternalLinkIcon, TrainTicketLogo } from "./Icons.js";
 import "./tokens.css";
 
 export function PopupApp({ bridge }: { bridge: PlatformBridge }) {
@@ -24,54 +25,71 @@ export function PopupApp({ bridge }: { bridge: PlatformBridge }) {
 
   return (
     <div data-theme={theme} className="gt-popup">
-      <div className="gt-brand" style={{ marginBottom: 12 }}>
-        <span className="gt-logo-mark" aria-hidden="true">
-          GT
-        </span>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 17 }}>{t(lang, "appName")}</h1>
-          <div className="gt-muted">
-            {isBn ? "Bangladesh Railway প্ল্যানার" : "Bangladesh Railway Planner"}
+      <div className="gt-brand" style={{ marginBottom: 14, justifyContent: "space-between" }}>
+        <div className="gt-brand">
+          <span className="gt-logo-mark" style={{ width: 34, height: 34, borderRadius: 10 }}>
+            <TrainTicketLogo size={18} />
+          </span>
+          <div>
+            <h1 style={{ margin: 0, fontSize: 16 }}>{t(lang, "appName")}</h1>
+            <div className="gt-muted" style={{ fontSize: 12 }}>
+              {isBn ? "Bangladesh Railway প্ল্যানার" : "Railway Trip Planner"}
+            </div>
           </div>
         </div>
+        <StatusBadge tone="live" label={isBn ? "সক্রিয়" : "Active"} />
       </div>
 
-      <div style={{ marginBottom: 12 }}>
-        <StatusBadge
-          tone="live"
-          label={isBn ? "সক্রিয় · লোকাল প্ল্যানার মোড" : "Active · Local Planner Mode"}
-        />
-      </div>
-
-      <div className="gt-card" style={{ padding: 14, marginBottom: 12 }}>
-        {activeProfile ? (
-          <>
-            <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
-              {activeProfile.fromStation} → {activeProfile.toStation}
-            </div>
-            <div className="gt-muted">
-              {activeProfile.journeyDate} · {activeProfile.passengerCount}{" "}
-              {isBn ? "টি টিকিট" : "ticket(s)"}
-            </div>
-            {releasePlan && (
-              <div className="gt-muted" style={{ marginTop: 4 }}>
-                {isBn ? "রিলিজ রিমাইন্ডার:" : "Release reminder:"}{" "}
-                <strong>{releasePlan.releaseDate}</strong>
+      <div className="gt-ticket-card" style={{ marginBottom: 14 }}>
+        <div className="gt-ticket-top" style={{ padding: "14px 16px 12px" }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", opacity: 0.9 }}>
+            {activeProfile
+              ? isBn
+                ? "সক্রিয় যাত্রা"
+                : "ACTIVE TRIP"
+              : isBn
+                ? "শুরু করুন"
+                : "GET STARTED"}
+          </div>
+          {activeProfile ? (
+            <div className="gt-ticket-route" style={{ marginTop: 6 }}>
+              <div style={{ fontSize: 16, fontWeight: 800 }}>{activeProfile.fromStation}</div>
+              <div className="gt-ticket-track" aria-hidden="true">
+                <span className="gt-ticket-track-line" />
               </div>
-            )}
-          </>
-        ) : (
-          <>
-            <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
-              {isBn ? "স্বাগতম! শুরু করতে ড্যাশবোর্ড খুলুন" : "Welcome! Open Dashboard to Start"}
+              <div style={{ fontSize: 16, fontWeight: 800 }}>{activeProfile.toStation}</div>
             </div>
-            <div className="gt-muted">
+          ) : (
+            <div style={{ marginTop: 6, fontSize: 14, fontWeight: 700 }}>
+              {isBn ? "প্রথম যাত্রা পরিকল্পনা করুন" : "Plan Your First Rail Trip"}
+            </div>
+          )}
+        </div>
+
+        <div className="gt-ticket-divider" aria-hidden="true">
+          <div className="gt-ticket-perf" />
+        </div>
+
+        <div className="gt-ticket-body" style={{ padding: "4px 16px 14px" }}>
+          {activeProfile ? (
+            <div className="gt-muted" style={{ fontSize: 12.5 }}>
+              <strong>{activeProfile.journeyDate}</strong> · {activeProfile.passengerCount}{" "}
+              {isBn ? "টি টিকিট" : "ticket(s)"}
+              {releasePlan && (
+                <div>
+                  {isBn ? "রিলিজ রিমাইন্ডার:" : "Release alert:"}{" "}
+                  <strong>{releasePlan.releaseDate}</strong>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="gt-muted" style={{ fontSize: 12.5 }}>
               {isBn
-                ? "স্টেশন, ক্যালেন্ডার থেকে তারিখ এবং ট্রেন সেভ করে রাখুন — তারপর এক ক্লিকে অফিসিয়াল সাইটে বুক করুন।"
-                : "Save your stations, calendar date, and preferred trains — then open the official e-ticket portal in one click."}
+                ? "স্টেশন, ক্যালেন্ডার থেকে তারিখ এবং ট্রেন সেভ করুন — তারপর এক ক্লিকে অফিসিয়াল সাইটে বুক করুন।"
+                : "Pick stations, select a date on the calendar, and open the official e-ticket portal in one click."}
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -81,7 +99,7 @@ export function PopupApp({ bridge }: { bridge: PlatformBridge }) {
             className="gt-btn gt-btn-primary"
             onClick={() => void bridge.openDashboardTab?.()}
           >
-            {isBn ? "ড্যাশবোর্ড খুলুন (যাত্রা ও ক্যালেন্ডার)" : "Open Full Dashboard"}
+            {isBn ? "পূর্ণ ড্যাশবোর্ড খুলুন" : "Open Full Dashboard"}
           </button>
         )}
         <button
@@ -89,7 +107,8 @@ export function PopupApp({ bridge }: { bridge: PlatformBridge }) {
           className="gt-btn"
           onClick={() => void bridge.openOfficialUrl(OFFICIAL_ETICKET_URL)}
         >
-          {t(lang, "openOfficialSite")} →
+          <span>{t(lang, "openOfficialSite")}</span>
+          <ExternalLinkIcon />
         </button>
       </div>
     </div>
