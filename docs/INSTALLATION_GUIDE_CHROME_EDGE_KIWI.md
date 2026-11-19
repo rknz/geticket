@@ -13,8 +13,8 @@ Download from the **GitHub Releases** page (<https://github.com/rknz/geticket/re
 
 | Platform | File to Download | Size | SHA-256 Checksum |
 | --- | --- | --- | --- |
-| **Computer (Chrome & Edge)** | `get-ticket-desktop-chrome-edge-v2.4.0.zip` | 133.4 KB | `aab616cac4d674bb4dfa364df4cd56295a8bbc042f015902472c05f67a956469` |
-| **Mobile (Kiwi Browser Android)** | `get-ticket-android-kiwi-v2.4.0.zip` | 133.4 KB | `9044fe75a3236dd2fb0133f3612cb7461934735259344c1a5f12e6d6d8f30558` |
+| **Computer (Chrome & Edge)** | `get-ticket-desktop-chrome-edge-v2.4.0.zip` | 133.2 KB | `ae95b1d45b506dfd1464f65a64091710ad33db6731a59295319b5ad4ff28953b` |
+| **Mobile (Kiwi Browser Android)** | `get-ticket-android-kiwi-v2.4.0.zip` | 133.3 KB | `de58c89fc411262dc96ebcbe523455b8de840c50728d111a1d9bbe005d45408d` |
 | **Checksums** | `SHA256SUMS.txt` | 209 B | Verifies integrity of both archives |
 
 ### Option B — Build from Source (Developers)

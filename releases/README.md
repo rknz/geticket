@@ -19,8 +19,8 @@ releases/
 
 | Your Device | Download File | Direct GitHub Download Link | Expected Size |
 | --- | --- | --- | --- |
-| **Android Mobile (Kiwi Browser)** | `get-ticket-android-kiwi-v2.4.0.zip` | <https://github.com/rknz/geticket/raw/main/releases/android/get-ticket-android-kiwi-v2.4.0.zip> | ~133.4 KB (`133,378` bytes) |
-| **Computer (Chrome / Edge)** | `get-ticket-desktop-chrome-edge-v2.4.0.zip` | <https://github.com/rknz/geticket/raw/main/releases/desktop/get-ticket-desktop-chrome-edge-v2.4.0.zip> | ~133.4 KB (`133,352` bytes) |
+| **Android Mobile (Kiwi Browser)** | `get-ticket-android-kiwi-v2.4.0.zip` | <https://github.com/rknz/geticket/raw/main/releases/android/get-ticket-android-kiwi-v2.4.0.zip> | ~133.3 KB (`133,257` bytes) |
+| **Computer (Chrome / Edge)** | `get-ticket-desktop-chrome-edge-v2.4.0.zip` | <https://github.com/rknz/geticket/raw/main/releases/desktop/get-ticket-desktop-chrome-edge-v2.4.0.zip> | ~133.2 KB (`133,231` bytes) |
 | **Integrity Checksums** | `SHA256SUMS.txt` | <https://github.com/rknz/geticket/raw/main/releases/checksums/SHA256SUMS.txt> | 209 bytes |
 
 ---
@@ -39,9 +39,9 @@ Before installing, verify these four things:
    - **Computer (Chrome & Edge):** Extract `get-ticket-desktop-chrome-edge-v2.4.0.zip` into a permanent folder and verify `manifest.json` is directly inside that folder.
 4. **Optional SHA-256 verification:**
    - `get-ticket-desktop-chrome-edge-v2.4.0.zip`:
-     `aab616cac4d674bb4dfa364df4cd56295a8bbc042f015902472c05f67a956469`
+     `ae95b1d45b506dfd1464f65a64091710ad33db6731a59295319b5ad4ff28953b`
    - `get-ticket-android-kiwi-v2.4.0.zip`:
-     `9044fe75a3236dd2fb0133f3612cb7461934735259344c1a5f12e6d6d8f30558`
+     `de58c89fc411262dc96ebcbe523455b8de840c50728d111a1d9bbe005d45408d`
    - On Windows PowerShell you can check with:
      ```powershell
      Get-FileHash -Algorithm SHA256 .\get-ticket-desktop-chrome-edge-v2.4.0.zip

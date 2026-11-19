@@ -15,6 +15,7 @@ function copyExtensionAssets() {
       copyFileSync(resolve(rootDir, "manifest.json"), resolve(distDir, "manifest.json"));
       cpSync(resolve(rootDir, "assets/icons"), resolve(distDir, "assets/icons"), {
         recursive: true,
+        filter: (src) => !src.endsWith(".gitkeep"),
       });
     },
   };
