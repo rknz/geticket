@@ -1,10 +1,19 @@
-# Get Ticket
+# Get Ticket (v2.4.0)
 
 **Get Ticket** হলো ব্যক্তিগত ব্যবহারের জন্য Bangladesh Railway ticket search, planning এবং booking-assistance browser extension প্রকল্প। লক্ষ্য হলো দুটি হালকা extension: Chrome/Edge desktop এবং Kiwi Browser Android।
 
+## ডাউনলোড ও দ্রুত শুরু (Download & Quick Start)
+
+Android ও Computer-এর release ফাইলগুলো আলাদা ফোল্ডারে সাজানো আছে (`releases/`):
+
+- **Computer (Chrome & Edge):** [get-ticket-desktop-chrome-edge-v2.4.0.zip](https://github.com/rknz/geticket/raw/main/releases/desktop/get-ticket-desktop-chrome-edge-v2.4.0.zip) *(extract করে Load unpacked দিন)*
+- **Mobile (Kiwi Browser Android):** [get-ticket-android-kiwi-v2.4.0.zip](https://github.com/rknz/geticket/raw/main/releases/android/get-ticket-android-kiwi-v2.4.0.zip) *(extract করবেন না; Kiwi-তে সরাসরি `.zip` লোড করুন)*
+- **ডাউনলোড চেকলিস্ট ও SHA-256 যাচাই:** [releases/README.md](releases/README.md) · [SHA256SUMS.txt](releases/checksums/SHA256SUMS.txt)
+- **সম্পূর্ণ ইনস্টলেশন ও ব্যবহার নির্দেশিকা:** [docs/INSTALLATION_GUIDE_CHROME_EDGE_KIWI.md](docs/INSTALLATION_GUIDE_CHROME_EDGE_KIWI.md)
+
 ## বর্তমান অবস্থা
 
-প্রকল্পটির **v0.1.0 (Steps 1–15, Option A — Manual / Reference-Only + Official-Site Handoff Mode)** সম্পন্ন হয়েছে এবং Chrome/Edge Desktop ও Kiwi Android-এর জন্য আলাদা unpacked build তৈরি হয়েছে (`npm.cmd run build`)। তবে কোনো live Railway API বা automated polling চালু করা হয়নি (অফিসিয়াল অনুমোদন ছাড়া নিষিদ্ধ), এবং Chrome/Edge/Kiwi real-device manual verification এখনো বাকি।
+প্রকল্পটির **v2.4.0 (Steps 1–15, Option A — Manual / Reference-Only + Official-Site Handoff Mode)** সম্পন্ন হয়েছে এবং Chrome/Edge Desktop ও Kiwi Android-এর জন্য আলাদা installable `.zip` release ফাইল `releases/` ফোল্ডারে যুক্ত করা হয়েছে। কোনো live Railway API বা automated polling চালু করা হয়নি (অফিসিয়াল অনুমোদন ছাড়া নিষিদ্ধ), এবং real-device manual verification এখনো বাকি।
 
 শুরু করার আগে পড়ুন:
 
