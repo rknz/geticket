@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/android-extension",
+  "version": "2.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Kiwi Browser Android extension build for Get Ticket."
+}

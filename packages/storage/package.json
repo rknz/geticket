@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/storage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local storage abstraction and safe schema migrations for Get Ticket."
+}

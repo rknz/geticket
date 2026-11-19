@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/desktop-extension",
+  "version": "2.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome and Edge Manifest V3 desktop extension for Get Ticket."
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/shared-core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared domain types, validators, and utilities for Get Ticket."
+}

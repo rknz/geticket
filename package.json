@@ -1,0 +1,33 @@
+{
+  "name": "get-ticket-workspace",
+  "version": "2.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal-use Bangladesh Railway booking-assistance browser extensions (Chrome/Edge MV3 and Kiwi Android).",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build:desktop": "vite build --config apps/desktop-extension/vite.config.ts",
+    "build:android": "vite build --config apps/android-extension/vite.config.ts",
+    "build": "npm run build:desktop && npm run build:android"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/chrome": "^0.3.7",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "typescript": "^5.7.3",
+    "vite": "^8.3.8",
+    "vitest": "^3.0.5"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
+  }
+}

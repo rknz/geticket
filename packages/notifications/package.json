@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/notifications",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser notification and fallback alert helpers for Get Ticket."
+}

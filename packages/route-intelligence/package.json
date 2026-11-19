@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/route-intelligence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Station graph, route search, and segment validation for Get Ticket."
+}

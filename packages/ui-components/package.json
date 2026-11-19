@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/ui-components",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared accessible Bangla/English UI components and semantic tokens for Get Ticket."
+}

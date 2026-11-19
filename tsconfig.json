@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@get-ticket/shared-core": ["packages/shared-core/src/index.ts"],
+      "@get-ticket/railway-engine": ["packages/railway-engine/src/index.ts"],
+      "@get-ticket/route-intelligence": ["packages/route-intelligence/src/index.ts"],
+      "@get-ticket/scheduler": ["packages/scheduler/src/index.ts"],
+      "@get-ticket/notifications": ["packages/notifications/src/index.ts"],
+      "@get-ticket/storage": ["packages/storage/src/index.ts"],
+      "@get-ticket/security": ["packages/security/src/index.ts"],
+      "@get-ticket/ui-components": ["packages/ui-components/src/index.ts"]
+    }
+  },
+  "include": [
+    "vitest.config.ts",
+    "apps/*/src/**/*.ts",
+    "apps/*/src/**/*.tsx",
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.tsx",
+    "tests/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "coverage"]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/security",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Message validation, domain allowlist, and redaction guards for Get Ticket."
+}

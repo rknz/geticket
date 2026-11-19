@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Get Ticket (Kiwi Android)",
+  "version": "2.4.0",
+  "description": "Personal Bangladesh Railway journey planner, preference sheet, and official booking handoff tailored for Kiwi Browser Android.",
+  "permissions": ["storage", "alarms", "notifications"],
+  "action": {
+    "default_title": "Get Ticket",
+    "default_popup": "src/popup/index.html",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png",
+      "48": "assets/icons/icon-48.png",
+      "128": "assets/icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_page": "src/options/index.html"
+}

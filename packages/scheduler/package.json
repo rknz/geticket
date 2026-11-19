@@ -1,0 +1,7 @@
+{
+  "name": "@get-ticket/scheduler",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Release planner, safe retry policy, and monitoring state scheduler for Get Ticket."
+}
